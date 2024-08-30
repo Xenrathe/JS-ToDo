@@ -4,10 +4,13 @@ body {
   padding: 0;
   background-color: #f0f0f0;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 header {
-  background-color: #4a90e2;
+  background-color: #001022;
   padding: 1rem;
   color: white;
 }
@@ -16,27 +19,133 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
+  height: 100px;
+  margin-right: max(15%, 50px);
+  margin-left: 50px;
 }
 
-nav button {
-  background-color: white;
-  color: #4a90e2;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
+.neon {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 3rem;
+  text-align: center;
+  line-height: 1;
+  color: #ffc6c6;
+  animation: neon .08s ease-in-out infinite alternate;
+}
+
+@keyframes neon {
+  from {
+    text-shadow:
+    0 0 6px rgba(228, 202, 202, 0.92),
+    0 0 30px rgba(202,228,225,0.34),
+    0 0 12px rgba(242, 30, 30, 0.52),
+    0 0 21px rgba(242, 30, 30, 0.92),
+    0 0 34px rgba(242, 30, 30, 0.78),
+    0 0 54px rgba(242, 30, 30, 0.92);
+  }
+  to {
+    text-shadow:
+    0 0 6px rgba(228, 202, 202, 0.98),
+    0 0 30px rgba(228, 202, 202, 0.42),
+    0 0 12px rgba(242, 30, 30, 0.58),
+    0 0 22px rgba(242, 30, 30, 0.84),
+    0 0 38px rgba(242, 30, 30, 0.88),
+    0 0 60px rgb(242, 30, 30);
+  }
+}
+
+#new-project {
+  color: rgb(255, 161, 74, 0.75);
+  display: grid;
+  place-content: center;
+  font-size: 2rem;
+  text-shadow: 0 1px 0 #969732;
+  padding: 5px 15px;
+}
+
+#new-project:hover {
+  color: rgb(255, 173, 96);
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
 }
 
-nav button:hover {
-  background-color: #e1e1e1;
+.neon-border {
+  --border-angle: 0turn;
+  --main-bg: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 5%,
+      #112 60%,
+      #213 95%
+    );
+  
+  border: solid 3px transparent;
+  border-radius: 5px;
+  --gradient-border: conic-gradient(from var(--border-angle), transparent 25%, rgb(234, 0, 255, 0.5), rgb(255, 0, 51, 0.5) 99%, transparent);
+  
+  background: 
+    var(--main-bg) padding-box,
+    var(--gradient-border) border-box, 
+    var(--main-bg) border-box;
+  
+  background-position: center center;
+
+  animation: bg-spin 3s linear infinite;
+}
+
+.neon-border:hover {
+  --gradient-border: conic-gradient(from var(--border-angle), transparent 25%,  rgb(234, 0, 255, 1), rgb(255, 0, 51, 1)99%, transparent);
+}
+
+@keyframes bg-spin {
+  to {
+    --border-angle: 1turn;
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
 }
 
 #content {
   padding: 2rem;
   max-height: calc(100vh - 70px);
+  flex: 1;
   overflow-y: auto;
+  display: grid;
+  gap: 15px;
+  background-color: rgb(240, 0, 241, 0.25);
+}
+
+@media screen and (min-width: 1400px) {
+  #content {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (min-width: 1050px) and (max-width: 1399px) {
+  #content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 700px) and (max-width: 1049px) {
+  #content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 699px) {
+  #content {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .project {
@@ -46,7 +155,8 @@ nav button:hover {
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
-  max-height: 300px;
+  max-height: 500px;
+  min-height: 250px;
 }
 
 .project h2 {
