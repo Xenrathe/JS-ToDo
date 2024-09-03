@@ -7,84 +7,38 @@
 </head>
 <body>
   <header>
-      <nav>
-          <h1 class="neon">Productivity Master 9000</h1>
-          <button id="new-project" class="neon-border">New Project</button>
-      </nav>
+    <nav>
+      <h1 class="neon">Productivity Master 9000</h1>
+      <button id="new-project" class="neon-border">New Project</button>
+    </nav>
   </header>
 
   <div id="content">
-      <!-- Example Project 1 -->
-      <div class="project">
+  <!-- Example Project 1 -->
+    <div class="project">
+      <div class="top-bar">
+        <div class="title-and-due">
           <h2>Project Alpha</h2>
-          <p>Description: A sample project to manage development tasks.</p>
-          <div class="todo-item">
-              <h3>Todo: Setup Development Environment</h3>
-              <p>Description: Install necessary software and dependencies.</p>
-              <p>Due Date: 2024-09-01</p>
-              <p>Priority: High</p>
-          </div>
-          <div class="todo-item">
-              <h3>Todo: Create Initial Project Structure</h3>
-              <p>Description: Setup the basic file structure for the project.</p>
-              <p>Due Date: 2024-09-02</p>
-              <p>Priority: Medium</p>
-          </div>
-      </div>
-
-      <!-- Example Project 2 -->
-      <div class="project">
-          <h2>Project Beta</h2>
-          <p>Description: A project for client-side features.</p>
-          <div class="todo-item">
-              <h3>Todo: Design UI Mockups</h3>
-              <p>Description: Create visual designs for the user interface.</p>
-              <p>Due Date: 2024-09-05</p>
-              <p>Priority: High</p>
-          </div>
-          <div class="todo-item">
-              <h3>Todo: Implement Navigation</h3>
-              <p>Description: Set up the initial navigation for the application.</p>
-              <p>Due Date: 2024-09-07</p>
-              <p>Priority: Low</p>
-          </div>
-      </div>
-
-      <!-- Example Project 3 -->
-      <div class="project">
-        <h2>Project Cow</h2>
-        <p>Description: A project for client-side features.</p>
-        <div class="todo-item">
-            <h3>Todo: Design UI Mockups</h3>
-            <p>Description: Create visual designs for the user interface.</p>
-            <p>Due Date: 2024-09-05</p>
-            <p>Priority: High</p>
+          <h5>Due 09/08/24</h5>
         </div>
-        <div class="todo-item">
-            <h3>Todo: Implement Navigation</h3>
-            <p>Description: Set up the initial navigation for the application.</p>
-            <p>Due Date: 2024-09-07</p>
-            <p>Priority: Low</p>
+        <div class="buttons">
+          <button class="delete"><span>x</span></button>
+          <button class="finish"><span>✓</span></button>
+          <button class="drag"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>drag</title><path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z" /></svg></button>
         </div>
+      </div>
+      <p>Description: A sample project to manage development tasks.</p>
+      <div class="todo-item">
+          <h3>Todo: Setup Development Environment</h3>
+          <p>Description: Install necessary software and dependencies.</p>
+      </div>
+      <div class="todo-item">
+          <h3>Todo: Create Initial Project Structure</h3>
+          <p>Description: Setup the basic file structure for the project.</p>
+      </div>
     </div>
 
-    <!-- Example Project 4 -->
-    <div class="project">
-      <h2>Project Dogo</h2>
-      <p>Description: A project for client-side features.</p>
-      <div class="todo-item">
-          <h3>Todo: Design UI Mockups</h3>
-          <p>Description: Create visual designs for the user interface.</p>
-          <p>Due Date: 2024-09-05</p>
-          <p>Priority: High</p>
-      </div>
-      <div class="todo-item">
-          <h3>Todo: Implement Navigation</h3>
-          <p>Description: Set up the initial navigation for the application.</p>
-          <p>Due Date: 2024-09-07</p>
-          <p>Priority: Low</p>
-      </div>
-  </div>
+
   </div>
 </body>
 </html>

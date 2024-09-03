@@ -159,8 +159,79 @@ nav {
   min-height: 250px;
 }
 
-.project h2 {
-  margin-top: 0;
+.project .top-bar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.project .top-bar .title-and-due {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.project h2, .project h5 {
+  margin: 0px;
+}
+
+.project .top-bar .buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.project .top-bar button {
+  background-color: transparent;
+  border: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: all 0.5s;
+  padding: 0px;
+}
+
+button.delete {
+  color: red;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+button.delete:hover {
+  background-color: red;
+  color: white;
+  transition: all 0.25s;
+}
+
+button.finish {
+  color: rgb(0, 221, 0);
+  font-size: 33px;
+  cursor: pointer;
+}
+
+button.finish:hover {
+  background-color: rgb(0, 221, 0);
+  color: white;
+  transition: all 0.25s;
+}
+
+button.drag {
+  cursor: grab;
+  box-sizing: border-box;
+}
+
+button.drag svg {
+  position: absolute;
+  width: 43px;
+}
+
+button.drag:hover {
+  border: dotted 1px black;
+}
+
+button.drag:active {
+  cursor: grabbing;
 }
 
 .todo-item {

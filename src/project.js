@@ -7,6 +7,7 @@ export class Project {
     this.dueDate = dueDate;
     this.priority = priority;
     this.todoItems = [];
+    this.isComplete = false;
   }
 
   // Adds an empty / default todoItem to the project
@@ -17,5 +18,9 @@ export class Project {
   // Remove anbased on indexNum (which the calling function should supply)
   removeTodo(indexNum) {
     this.todoItems.splice(indexNum, 1);
+  }
+
+  toggleComplete(){
+    this.isComplete = !this.isComplete;
   }
 }

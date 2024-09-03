@@ -1,10 +1,8 @@
 export class TodoItem {
-  constructor(title, description, dueDate, priority, checklist) {
+  constructor(title, description, priority) {
     this.title = title;
     this.description = description;
-    this.dueDate = dueDate;
     this.priority = priority;
-    this.checklist = checklist;
     this.isComplete = false;
   }
 
