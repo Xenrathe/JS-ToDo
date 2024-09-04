@@ -1,0 +1,13 @@
+.noborder {
+  padding: 0px !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.highlighted-input {
+  background: transparent !important;
+}
+
+.highlighted-input:hover, .project .highlighted-input:focus {
+  background: rgb(240, 240, 240) !important;
+}

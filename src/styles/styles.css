@@ -60,60 +60,6 @@ nav {
   }
 }
 
-#new-project {
-  color: rgb(255, 161, 74, 0.75);
-  display: grid;
-  place-content: center;
-  font-size: 2rem;
-  text-shadow: 0 1px 0 #969732;
-  padding: 5px 15px;
-}
-
-#new-project:hover {
-  color: rgb(255, 173, 96);
-  cursor: pointer;
-}
-
-.neon-border {
-  --border-angle: 0turn;
-  --main-bg: conic-gradient(
-      from var(--border-angle),
-      #213,
-      #112 5%,
-      #112 60%,
-      #213 95%
-    );
-  
-  border: solid 3px transparent;
-  border-radius: 5px;
-  --gradient-border: conic-gradient(from var(--border-angle), transparent 25%, rgb(234, 0, 255, 0.5), rgb(255, 0, 51, 0.5) 99%, transparent);
-  
-  background: 
-    var(--main-bg) padding-box,
-    var(--gradient-border) border-box, 
-    var(--main-bg) border-box;
-  
-  background-position: center center;
-
-  animation: bg-spin 3s linear infinite;
-}
-
-.neon-border:hover {
-  --gradient-border: conic-gradient(from var(--border-angle), transparent 25%,  rgb(234, 0, 255, 1), rgb(255, 0, 51, 1)99%, transparent);
-}
-
-@keyframes bg-spin {
-  to {
-    --border-angle: 1turn;
-  }
-}
-
-@property --border-angle {
-  syntax: "<angle>";
-  inherits: true;
-  initial-value: 0turn;
-}
-
 #content {
   padding: 2rem;
   max-height: calc(100vh - 70px);
@@ -162,76 +108,14 @@ nav {
 .project .top-bar {
   display: flex;
   justify-content: space-between;
+  gap: 5px;
 }
 
 .project .top-bar .title-and-due {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-}
-
-.project h2, .project h5 {
-  margin: 0px;
-}
-
-.project .top-bar .buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.project .top-bar button {
-  background-color: transparent;
-  border: none;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  transition: all 0.5s;
-  padding: 0px;
-}
-
-button.delete {
-  color: red;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-button.delete:hover {
-  background-color: red;
-  color: white;
-  transition: all 0.25s;
-}
-
-button.finish {
-  color: rgb(0, 221, 0);
-  font-size: 33px;
-  cursor: pointer;
-}
-
-button.finish:hover {
-  background-color: rgb(0, 221, 0);
-  color: white;
-  transition: all 0.25s;
-}
-
-button.drag {
-  cursor: grab;
-  box-sizing: border-box;
-}
-
-button.drag svg {
-  position: absolute;
-  width: 43px;
-}
-
-button.drag:hover {
-  border: dotted 1px black;
-}
-
-button.drag:active {
-  cursor: grabbing;
+  flex: 1;
 }
 
 .todo-item {

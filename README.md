@@ -1,7 +1,10 @@
 # JS-ToDo
 
 ## To-do List:
-- For a given project: delete button, finish button, editable title, editable description, editable due date, drag button (for priority)
-- For a given todo item: delete button, finish button, editable title, editable description, drag button (for priority)
+- Add save, delete, drag JS functionality for projects
+- New project JS functionality
+- Add, save, delete, drag JS functionality for todo-items
+- New todo list JS fuctiaonlity
 - Create a DOM-controller module
+- Responsiveness for different layouts (convert font-size to rem, etc)
 - Add a localStorage / Web Storage API
