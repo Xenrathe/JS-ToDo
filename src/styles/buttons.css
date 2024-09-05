@@ -109,7 +109,7 @@ button.drag {
 }
 
 .project button.drag svg {
-  position: absolute;
+  position: relative;
   width: 43px;
 }
 
