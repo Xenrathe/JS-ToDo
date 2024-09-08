@@ -106,3 +106,7 @@ export function toggleCompletionInDOM(element) {
     });
   }
 }
+
+export function removeObjectInDOM(element) {
+  element.remove();
+}

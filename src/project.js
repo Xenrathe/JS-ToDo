@@ -1,5 +1,5 @@
 import { TodoItem } from "./todo-item.js";
-import { addNewTodoInDOM, toggleCompletionInDOM } from "./domController.js";
+import { addNewTodoInDOM, toggleCompletionInDOM, removeObjectInDOM } from "./domController.js";
 
 export class Project {
   constructor(title, description, dueDate, priority, projectNum, DOMelement) {
@@ -24,20 +24,28 @@ export class Project {
     const DOMelement = addNewTodoInDOM(this.DOMelement, this.projectNum, todoItemNum);
 
     //Create todo object
-    const newTodoItem = new TodoItem("New", "A new todo item...", todoItemNum, this, DOMelement);
+    const newTodoItem = new TodoItem(`Todo #${todoItemNum}`, "[description here]", todoItemNum, this, DOMelement);
     this.todoItems.push(newTodoItem);
 
     // Add eventListeners on other buttons
     const toggleCompleteBTN = DOMelement.querySelector('.finish-todo');
-    toggleCompleteBTN.addEventListener('click', newTodoItem.toggleComplete.bind(newTodoItem));
+    toggleCompleteBTN.addEventListener('click', () => newTodoItem.toggleComplete.bind(newTodoItem));
+    const deleteTodoBTN = DOMelement.querySelector('.delete');
+    deleteTodoBTN.addEventListener('click', () => this.removeTodo(todoItemNum));
   }
 
   // Remove todo based on indexNum (which the calling function should supply)
-  removeTodo(indexNum) {
+  removeTodo(todoNum) {
     if (this.isComplete)
       return;
 
-    this.todoItems.splice(indexNum, 1);
+    if (confirm(`Are you sure to wish to delete ${this.todoItems[todoNum - 1].title}?`)){
+      removeObjectInDOM(this.todoItems[todoNum - 1].DOMelement);
+  
+      //Set todo to null instead of removing
+      //This maintains number consistency across all aspects
+      this.todoItems[todoNum - 1] = null;
+    }
   }
 
   toggleComplete(){
