@@ -8,6 +8,10 @@
   background: transparent !important;
 }
 
-.highlighted-input:hover, .project .highlighted-input:focus {
+.highlighted-input:not([disabled]) {
+  cursor: text;
+}
+
+.highlighted-input:not([disabled]):hover, .highlighted-input:not([disabled]):focus {
   background: rgb(240, 240, 240) !important;
 }

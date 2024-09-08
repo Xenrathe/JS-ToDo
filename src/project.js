@@ -1,5 +1,5 @@
 import { TodoItem } from "./todo-item.js";
-import { addNewTodoInDOM } from "./domController.js";
+import { addNewTodoInDOM, toggleCompletionInDOM } from "./domController.js";
 
 export class Project {
   constructor(title, description, dueDate, priority, projectNum, DOMelement) {
@@ -15,22 +15,33 @@ export class Project {
 
   // Adds an empty / default todoItem to the project
   addNewTodo(){
+    if (this.isComplete)
+      return;
+
     const todoItemNum = this.todoItems.length + 1;
 
     //Create in DOM
-    let DOMelement = addNewTodoInDOM(this.DOMelement, this.projectNum, todoItemNum);
+    const DOMelement = addNewTodoInDOM(this.DOMelement, this.projectNum, todoItemNum);
 
     //Create todo object
-    const newTodoItem = new TodoItem("New", "A new todo item...", this.dueDate, todoItemNum, DOMelement);
+    const newTodoItem = new TodoItem("New", "A new todo item...", todoItemNum, this, DOMelement);
     this.todoItems.push(newTodoItem);
+
+    // Add eventListeners on other buttons
+    const toggleCompleteBTN = DOMelement.querySelector('.finish-todo');
+    toggleCompleteBTN.addEventListener('click', newTodoItem.toggleComplete.bind(newTodoItem));
   }
 
-  // Remove anbased on indexNum (which the calling function should supply)
+  // Remove todo based on indexNum (which the calling function should supply)
   removeTodo(indexNum) {
+    if (this.isComplete)
+      return;
+
     this.todoItems.splice(indexNum, 1);
   }
 
   toggleComplete(){
     this.isComplete = !this.isComplete;
+    toggleCompletionInDOM(this.DOMelement);
   }
 }

@@ -105,6 +105,10 @@ nav {
   min-height: 250px;
 }
 
+.project.complete {
+  background-color: #bdffac;
+}
+
 .project .top-bar {
   display: flex;
   justify-content: space-between;
@@ -126,10 +130,14 @@ nav {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.new-todo {
+.todo-item.complete, .complete .todo-item {
+  background-color: #a6ff90;
+}
+
+.incomplete .new-todo {
   cursor: pointer;
 }
 
-.new-todo:hover {
+.incomplete .new-todo:hover {
   background-color: rgb(255, 228, 177);
 }

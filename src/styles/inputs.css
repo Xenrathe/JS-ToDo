@@ -33,6 +33,6 @@ textarea {
   line-height: 1.5;
 }
 
-input[type="date"] {
+input[type="date"]:not([disabled]) {
   cursor: text;
 }
