@@ -15,3 +15,7 @@
 .highlighted-input:not([disabled]):hover, .highlighted-input:not([disabled]):focus {
   background: rgb(240, 240, 240) !important;
 }
+
+.ghostly {
+  opacity: 0.5;
+}

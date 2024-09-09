@@ -1,5 +1,5 @@
 import { Project } from "./project.js";
-import { addTextAreaHeightAdjusters, addNewProjectInDOM, removeObjectInDOM } from "./domController.js"
+import { addTextAreaHeightAdjusters, addDragAndReorder, addNewProjectInDOM, removeObjectInDOM, setDraggable } from "./domController.js"
 import "./styles/styles.css";
 import "./styles/classes.css";
 import "./styles/buttons.css";
@@ -7,6 +7,7 @@ import "./styles/inputs.css";
 
 let currProjectNum = 0;
 let projects = [];
+let draggedItem = null;
 
 // Runs when the New Project button is clicked
 function newProject() {
@@ -28,6 +29,10 @@ function newProject() {
   toggleCompleteBTN.addEventListener('click', () => newProject.toggleComplete.bind(newProject));
   const deleteProjectBTN = domElement.querySelector('.delete');
   deleteProjectBTN.addEventListener('click', () => removeProject(projectNum));
+  const dragProjectBTN = domElement.querySelector('.drag');
+  // Only want the drag button to enable dragging
+  dragProjectBTN.addEventListener('mousedown', () => setDraggable(domElement, true));
+  domElement.addEventListener('dragend', () => setDraggable(domElement, false));
 }
 
 function removeProject(projectNum) {
@@ -40,9 +45,33 @@ function removeProject(projectNum) {
   }
 }
 
+function updatePriorities() {
+  const projectElements = document.querySelectorAll('#content .project');
+  
+  projectElements.forEach((projectElement, index) => {
+    const projectNum = projectElement.id.replace('p', '') - 1; // #p1 is actually the 0th item in projects array
+    const project = projects[projectNum];
+
+    if (project) {
+      // update the priority property
+      project.priority = index + 1;
+    }
+  });
+
+  projects.forEach((project) => {
+    console.log(`Priority #${project.priority}: ${project.title}`);
+  });
+}
+
 // Run 1x on page load, mostly adding event handlers
 function onPageLoad() {
   addTextAreaHeightAdjusters();
+
+  // eventListeners on #content
+  addDragAndReorder();
+  const contentDiv = document.querySelector('#content');
+  contentDiv.addEventListener('drop', updatePriorities);
+
   const newProjectBtn = document.querySelector('#new-project');
   newProjectBtn.addEventListener('click', newProject);
 

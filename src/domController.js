@@ -110,3 +110,62 @@ export function toggleCompletionInDOM(element) {
 export function removeObjectInDOM(element) {
   element.remove();
 }
+
+// This will be called by clicking (or releasing) a drag button
+let draggedItem = null;
+export function setDraggable(element, state) {
+  if (state) {
+    element.setAttribute('draggable', 'true');
+    element.classList.add('ghostly'); 
+    draggedItem = element;
+  }
+  else {
+    element.setAttribute('draggable', 'false');
+    element.classList.remove('ghostly');
+    draggedItem = null;
+  }
+}
+
+  // add drag and reorder event listener on #content div
+  export function addDragAndReorder() {
+    const contentDiv = document.querySelector('#content');
+    contentDiv.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const draggedItem = document.querySelector('.project[draggable="true"]');
+      const closestProject = e.target.closest('.project');
+  
+      if (closestProject && closestProject !== draggedItem) {
+        const bounding = closestProject.getBoundingClientRect();
+        const offsetY = e.clientY - bounding.top;
+        
+        if (offsetY < bounding.height / 2) {
+          contentDiv.insertBefore(draggedItem, closestProject);
+        } else {
+          contentDiv.insertBefore(draggedItem, closestProject.nextSibling);
+        }
+      } else if (!closestProject && draggedItem) {
+        // handle when dragging beyond the last item in the current row
+        const lastProjectInRow = getLastProjectInRow(e.clientY);
+        if (lastProjectInRow) {
+          const bounding = lastProjectInRow.getBoundingClientRect();
+          if (e.clientX > bounding.right) {
+            contentDiv.insertBefore(draggedItem, lastProjectInRow.nextSibling);
+          }
+        }
+      }
+    });
+  
+    // helper function to get the last project in the row based on the Y position
+    function getLastProjectInRow(clientY) {
+      const allProjects = [...document.querySelectorAll('.project')];
+      const projectsInSameRow = allProjects.filter((project) => {
+        const bounding = project.getBoundingClientRect();
+        return clientY >= bounding.top && clientY <= bounding.bottom;
+      });
+  
+      if (projectsInSameRow.length > 0) {
+        return projectsInSameRow[projectsInSameRow.length - 1]; // return the last project in the row
+      }
+      return null;
+    }
+  }
