@@ -1,4 +1,4 @@
-import { addNewTodoInDOM, toggleCompletionInDOM } from "./domController.js";
+import { toggleCompletionInDOM } from "./domController.js";
 
 export class TodoItem {
   constructor(title, description, priority, parentProject, DOMelement) {
@@ -13,7 +13,7 @@ export class TodoItem {
   toggleComplete(){
     if (this.parentProject.isComplete)
       return;
-    
+
     this.isComplete = !this.isComplete;
     toggleCompletionInDOM(this.DOMelement);
   }

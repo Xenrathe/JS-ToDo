@@ -122,7 +122,7 @@ nav {
   flex: 1;
 }
 
-.todo-item {
+.todo-item, .new-todo {
   background-color: #f9f9f9;
   margin-bottom: 0.5rem;
   padding: 0.75rem;
@@ -130,7 +130,7 @@ nav {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.todo-item.complete, .complete .todo-item {
+.todo-item.complete, .complete .todo-item, .complete .new-todo {
   background-color: #a6ff90;
 }
 

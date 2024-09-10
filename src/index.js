@@ -1,5 +1,5 @@
 import { Project } from "./project.js";
-import { addTextAreaHeightAdjusters, addDragAndReorder, addNewProjectInDOM, removeObjectInDOM, setDraggable } from "./domController.js"
+import { addTextAreaHeightAdjusters, addDragAndReorder, addNewProjectInDOM, removeObjectInDOM, setDraggable, draggedItem } from "./domController.js"
 import "./styles/styles.css";
 import "./styles/classes.css";
 import "./styles/buttons.css";
@@ -7,7 +7,6 @@ import "./styles/inputs.css";
 
 let currProjectNum = 0;
 let projects = [];
-let draggedItem = null;
 
 // Runs when the New Project button is clicked
 function newProject() {
@@ -16,23 +15,23 @@ function newProject() {
   //Because of dynamic variable / closure reasons
   const projectNum = currProjectNum;
 
-  var domElement = addNewProjectInDOM(projectNum);
-  const newProject = new Project(`Project #${projectNum}`, '[description here]', '2024-09-08', 1, projectNum, domElement);
+  var DOMelement = addNewProjectInDOM(projectNum);
+  const newProject = new Project(`Project #${projectNum}`, '[description here]', '2024-09-08', 1, projectNum, DOMelement);
   projects.push(newProject);
 
   // Add eventListener for new todo
-  const newTodoItem = domElement.querySelector('.new-todo');
+  const newTodoItem = DOMelement.querySelector('.new-todo');
   newTodoItem.addEventListener('click', newProject.addNewTodo.bind(newProject));
 
   // Add eventListeners on other buttons
-  const toggleCompleteBTN = domElement.querySelector('.finish-proj');
-  toggleCompleteBTN.addEventListener('click', () => newProject.toggleComplete.bind(newProject));
-  const deleteProjectBTN = domElement.querySelector('.delete');
+  const toggleCompleteBTN = DOMelement.querySelector('.finish-proj');
+  toggleCompleteBTN.addEventListener('click', newProject.toggleComplete.bind(newProject));
+  const deleteProjectBTN = DOMelement.querySelector('.delete');
   deleteProjectBTN.addEventListener('click', () => removeProject(projectNum));
-  const dragProjectBTN = domElement.querySelector('.drag');
+  const dragProjectBTN = DOMelement.querySelector('.drag');
   // Only want the drag button to enable dragging
-  dragProjectBTN.addEventListener('mousedown', () => setDraggable(domElement, true));
-  domElement.addEventListener('dragend', () => setDraggable(domElement, false));
+  dragProjectBTN.addEventListener('mousedown', () => setDraggable(DOMelement, true));
+  DOMelement.addEventListener('dragend', () => setDraggable(DOMelement, false));
 }
 
 function removeProject(projectNum) {
@@ -45,7 +44,16 @@ function removeProject(projectNum) {
   }
 }
 
-function updatePriorities() {
+function updatePriorities () {
+  if (draggedItem.classList.contains('project')) {
+    updateProjectPriorities();
+  }
+  else {
+    updateTodoItemsPriorities();
+  }
+}
+
+function updateProjectPriorities() {
   const projectElements = document.querySelectorAll('#content .project');
   
   projectElements.forEach((projectElement, index) => {
@@ -57,10 +65,12 @@ function updatePriorities() {
       project.priority = index + 1;
     }
   });
+}
 
-  projects.forEach((project) => {
-    console.log(`Priority #${project.priority}: ${project.title}`);
-  });
+function updateTodoItemsPriorities() {
+  const projectNum = draggedItem.id.split('-')[0].slice(1) - 1; // e.g. p6-t12 will return '5' for use in array
+  const project = projects[projectNum];
+  project.updatePriorities();
 }
 
 // Run 1x on page load, mostly adding event handlers

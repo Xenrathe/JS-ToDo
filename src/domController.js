@@ -5,7 +5,6 @@ export function addTextAreaHeightAdjusters(){
     textArea.addEventListener('input', () => {
       textArea.style.height = 'auto'; // Reset the height
       let newHeight = textArea.scrollHeight;
-      console.log(`newHeight is ${newHeight}`);
 
       // Optional: Adjust for padding and borders if needed
       const computedStyle = window.getComputedStyle(textArea);
@@ -69,7 +68,7 @@ export function addNewProjectInDOM(projectNum) {
       </div>
       <textarea id="p${projectNum}-desc" class="description highlighted-input noborder">[description here]</textarea>
     </div>
-    <div class="new-todo todo-item" id="p${projectNum}-t0">
+    <div class="new-todo" id="p${projectNum}-t0">
         + New
     </div>
   `;
@@ -101,7 +100,6 @@ export function toggleCompletionInDOM(element) {
     element.classList.remove('complete');
 
     childElements.forEach((element) => {
-      console.log(element);
       element.disabled = false;
     });
   }
@@ -112,7 +110,7 @@ export function removeObjectInDOM(element) {
 }
 
 // This will be called by clicking (or releasing) a drag button
-let draggedItem = null;
+export let draggedItem = null;
 export function setDraggable(element, state) {
   if (state) {
     element.setAttribute('draggable', 'true');
@@ -126,46 +124,76 @@ export function setDraggable(element, state) {
   }
 }
 
-  // add drag and reorder event listener on #content div
-  export function addDragAndReorder() {
-    const contentDiv = document.querySelector('#content');
-    contentDiv.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      const draggedItem = document.querySelector('.project[draggable="true"]');
-      const closestProject = e.target.closest('.project');
-  
-      if (closestProject && closestProject !== draggedItem) {
-        const bounding = closestProject.getBoundingClientRect();
-        const offsetY = e.clientY - bounding.top;
-        
-        if (offsetY < bounding.height / 2) {
-          contentDiv.insertBefore(draggedItem, closestProject);
-        } else {
-          contentDiv.insertBefore(draggedItem, closestProject.nextSibling);
-        }
-      } else if (!closestProject && draggedItem) {
-        // handle when dragging beyond the last item in the current row
-        const lastProjectInRow = getLastProjectInRow(e.clientY);
-        if (lastProjectInRow) {
-          const bounding = lastProjectInRow.getBoundingClientRect();
-          if (e.clientX > bounding.right) {
-            contentDiv.insertBefore(draggedItem, lastProjectInRow.nextSibling);
-          }
+// add drag and reorder event listener on #content div
+export function addDragAndReorder() {
+  const contentDiv = document.querySelector('#content');
+  contentDiv.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    
+    if (draggedItem.classList.contains('project')) {
+      dragProject(e);
+    } 
+    else if (draggedItem.classList.contains('todo-item')){
+      dragTodoItem(e);
+    }
+    
+  });
+
+  function dragProject(e) {
+    const closestProject = e.target.closest('.project');
+
+    if (closestProject && closestProject !== draggedItem) {
+      const bounding = closestProject.getBoundingClientRect();
+      const offsetY = e.clientY - bounding.top;
+      
+      if (offsetY < bounding.height / 2) {
+        contentDiv.insertBefore(draggedItem, closestProject);
+      } else {
+        contentDiv.insertBefore(draggedItem, closestProject.nextSibling);
+      }
+    } else if (!closestProject && draggedItem) {
+      // handle when dragging beyond the last item in the current row
+      const lastProjectInRow = getLastProjectInRow(e.clientY);
+      if (lastProjectInRow) {
+        const bounding = lastProjectInRow.getBoundingClientRect();
+        if (e.clientX > bounding.right) {
+          contentDiv.insertBefore(draggedItem, lastProjectInRow.nextSibling);
         }
       }
-    });
-  
-    // helper function to get the last project in the row based on the Y position
-    function getLastProjectInRow(clientY) {
-      const allProjects = [...document.querySelectorAll('.project')];
-      const projectsInSameRow = allProjects.filter((project) => {
-        const bounding = project.getBoundingClientRect();
-        return clientY >= bounding.top && clientY <= bounding.bottom;
-      });
-  
-      if (projectsInSameRow.length > 0) {
-        return projectsInSameRow[projectsInSameRow.length - 1]; // return the last project in the row
-      }
-      return null;
     }
   }
+
+  function dragTodoItem(e) {
+    const projectDiv = e.target.closest('.project');
+    // only allowing dragging / reordering within the todo-item's project
+    if (projectDiv != null && projectDiv.id != draggedItem.id.split('-')[0])
+      return;
+
+    const closestTodoItem = e.target.closest('.todo-item');
+
+    if (closestTodoItem && closestTodoItem !== draggedItem) {
+      const bounding = closestTodoItem.getBoundingClientRect();
+      const offsetY = e.clientY - bounding.top;
+      
+      if (offsetY < bounding.height / 2) {
+        projectDiv.insertBefore(draggedItem, closestTodoItem);
+      } else {
+        projectDiv.insertBefore(draggedItem, closestTodoItem.nextSibling);
+      }
+    }
+  }
+
+  // helper function to get the last project in the row based on the Y position
+  function getLastProjectInRow(clientY) {
+    const allProjects = [...document.querySelectorAll('.project')];
+    const projectsInSameRow = allProjects.filter((project) => {
+      const bounding = project.getBoundingClientRect();
+      return clientY >= bounding.top && clientY <= bounding.bottom;
+    });
+
+    if (projectsInSameRow.length > 0) {
+      return projectsInSameRow[projectsInSameRow.length - 1]; // return the last project in the row
+    }
+    return null;
+  }
+}

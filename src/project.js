@@ -1,5 +1,5 @@
 import { TodoItem } from "./todo-item.js";
-import { addNewTodoInDOM, toggleCompletionInDOM, removeObjectInDOM } from "./domController.js";
+import { addNewTodoInDOM, toggleCompletionInDOM, removeObjectInDOM, setDraggable } from "./domController.js";
 
 export class Project {
   constructor(title, description, dueDate, priority, projectNum, DOMelement) {
@@ -32,6 +32,10 @@ export class Project {
     toggleCompleteBTN.addEventListener('click', () => newTodoItem.toggleComplete.bind(newTodoItem));
     const deleteTodoBTN = DOMelement.querySelector('.delete');
     deleteTodoBTN.addEventListener('click', () => this.removeTodo(todoItemNum));
+    const dragTodoBTN = DOMelement.querySelector('.drag');
+    // Only want the drag button to enable dragging
+    dragTodoBTN.addEventListener('mousedown', () => setDraggable(DOMelement, true));
+    DOMelement.addEventListener('dragend', () => setDraggable(DOMelement, false));
   }
 
   // Remove todo based on indexNum (which the calling function should supply)
@@ -51,5 +55,19 @@ export class Project {
   toggleComplete(){
     this.isComplete = !this.isComplete;
     toggleCompletionInDOM(this.DOMelement);
+  }
+
+  updatePriorities(){
+    const todoElements = this.DOMelement.querySelectorAll('.todo-item');
+  
+    todoElements.forEach((todoElement, index) => {
+      const todoNum = todoElement.id.split('-')[1].slice(1) - 1; // p6-t12 becomes '11'
+      const todoItem = this.todoItems[todoNum];
+
+      // Because some may be null
+      if (todoItem) {
+        todoItem.priority = index + 1;
+      }
+    });
   }
 }
