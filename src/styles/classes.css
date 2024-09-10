@@ -18,4 +18,5 @@
 
 .ghostly {
   opacity: 0.5;
+  border: dotted red 2px;
 }

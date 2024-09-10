@@ -1,5 +1,6 @@
 import { Project } from "./project.js";
 import { addTextAreaHeightAdjusters, addDragAndReorder, addNewProjectInDOM, removeObjectInDOM, setDraggable, draggedItem } from "./domController.js"
+import { getInitialDueDate } from "./dates.js";
 import "./styles/styles.css";
 import "./styles/classes.css";
 import "./styles/buttons.css";
@@ -16,7 +17,8 @@ function newProject() {
   const projectNum = currProjectNum;
 
   var DOMelement = addNewProjectInDOM(projectNum);
-  const newProject = new Project(`Project #${projectNum}`, '[description here]', '2024-09-08', 1, projectNum, DOMelement);
+  const dueDate = getInitialDueDate(); // A Date object, set to one week from today
+  const newProject = new Project(`Project #${projectNum}`, '[description here]', dueDate, 1, projectNum, DOMelement);
   projects.push(newProject);
 
   // Add eventListener for new todo

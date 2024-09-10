@@ -1,3 +1,5 @@
+import { getInitialDateAsString } from "./dates.js";
+
 // Automatically adjusts the height of all the various textareas (both growing and getting smaller)
 export function addTextAreaHeightAdjusters(){
   const textAreas = document.querySelectorAll('textarea');
@@ -48,6 +50,8 @@ export function addNewTodoInDOM(projectElement, projectNum, todoNum) {
 // Create new project in the #content div
 export function addNewProjectInDOM(projectNum) {
   const contentDiv = document.querySelector('#content');
+  const dateInputValue = getInitialDateAsString(); //Returns a date ONE WEEK from today
+
   var newProjectDiv = document.createElement("div");
   newProjectDiv.classList.add('project', 'incomplete');
   newProjectDiv.id = `p${projectNum}`;
@@ -57,7 +61,7 @@ export function addNewProjectInDOM(projectNum) {
           <textarea id="p${projectNum}-title" rows="1" class="title highlighted-input noborder">Project #${projectNum}</textarea>
           <div>
             <label for="p${projectNum}-date">Due: </label>
-            <input type="date" class="noborder highlighted-input" value="2024-09-08" id="p${projectNum}-date">
+            <input type="date" class="noborder highlighted-input" value="${dateInputValue}" id="p${projectNum}-date">
           </div>
         </div>
         <div class="buttons buttons">
