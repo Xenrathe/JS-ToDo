@@ -1,8 +1,10 @@
 import { TodoItem } from "./todo-item.js";
-import { addNewTodoInDOM, toggleCompletionInDOM, removeObjectInDOM, setDraggable } from "./domController.js";
+import { addTodoInDOM, updateCompletionInDOM, removeObjectInDOM, addEventListenersToTodo } from "./domController.js";
+import { storeProject } from "./storage.js";
+// project.js handles the Project class
 
 export class Project {
-  constructor(title, description, dueDate, priority, projectNum, DOMelement) {
+  constructor(title, description, dueDate, priority, projectNum, DOMelement, isComplete) {
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;
@@ -10,7 +12,7 @@ export class Project {
     this.projectNum = projectNum;
     this.DOMelement = DOMelement;
     this.todoItems = [];
-    this.isComplete = false;
+    this.isComplete = isComplete;
   }
 
   // Adds an empty / default todoItem to the project
@@ -20,41 +22,73 @@ export class Project {
 
     const todoItemNum = this.todoItems.length + 1;
 
-    //Create in DOM
-    const DOMelement = addNewTodoInDOM(this.DOMelement, this.projectNum, todoItemNum);
-
     //Create todo object
-    const newTodoItem = new TodoItem(`Todo #${todoItemNum}`, "[description here]", todoItemNum, this, DOMelement);
+    const newTodoItem = new TodoItem(`Todo #${todoItemNum}`, "[description here]", todoItemNum, todoItemNum, this, false);
+    newTodoItem.DOMelement = addTodoInDOM(newTodoItem);
+    addEventListenersToTodo(newTodoItem);
+    
     this.todoItems.push(newTodoItem);
+    storeProject(this);
+  }
 
-    // Add eventListeners on other buttons
-    const toggleCompleteBTN = DOMelement.querySelector('.finish-todo');
-    toggleCompleteBTN.addEventListener('click', () => newTodoItem.toggleComplete.bind(newTodoItem));
-    const deleteTodoBTN = DOMelement.querySelector('.delete');
-    deleteTodoBTN.addEventListener('click', () => this.removeTodo(todoItemNum));
-    const dragTodoBTN = DOMelement.querySelector('.drag');
-    // Only want the drag button to enable dragging
-    dragTodoBTN.addEventListener('mousedown', () => setDraggable(DOMelement, true));
-    DOMelement.addEventListener('dragend', () => setDraggable(DOMelement, false));
+  // Should only be called upon pageload
+  addTodosToDOM(){
+    this.todoItems.forEach((todoItem) => {
+      todoItem.DOMelement = addTodoInDOM(todoItem);
+      addEventListenersToTodo(todoItem);
+      updateCompletionInDOM(todoItem.DOMelement, todoItem.isComplete);
+    });
   }
 
   // Remove todo based on indexNum (which the calling function should supply)
-  removeTodo(todoNum) {
+  removeTodo(todoItem) {
     if (this.isComplete)
       return;
 
-    if (confirm(`Are you sure to wish to delete ${this.todoItems[todoNum - 1].title}?`)){
-      removeObjectInDOM(this.todoItems[todoNum - 1].DOMelement);
+    if (confirm(`Are you sure to wish to delete ${todoItem.title}?`)){
+      removeObjectInDOM(todoItem.DOMelement);
   
       //Set todo to null instead of removing
       //This maintains number consistency across all aspects
-      this.todoItems[todoNum - 1] = null;
+      const index = this.todoItems.indexOf(todoItem);
+      this.todoItems[index] = null;
+      storeProject(this);
     }
   }
 
-  toggleComplete(){
-    this.isComplete = !this.isComplete;
-    toggleCompletionInDOM(this.DOMelement);
+  stringify() {
+    const todoItemStrings = [];
+    this.todoItems.forEach ((todoItem) => {
+      if (todoItem != null) {
+        todoItemStrings.push(todoItem.stringify());
+      }
+      else {
+        todoItemStrings.push('null');
+      }
+    });
+
+    console.log("toDoItemStrings:" + JSON.stringify(todoItemStrings));
+
+    const stringObject = {title: this.title, description: this.description, dueDate: this.dueDate, priority: this.priority, 
+      projectNum: this.projectNum, isComplete: this.isComplete, todoItems: JSON.stringify(todoItemStrings)};
+
+    return stringObject;
+  }
+
+  updateValues() {
+    //title
+    const titleDOM = this.DOMelement.querySelector(`#p${this.projectNum}-title`);
+    this.title = titleDOM.value;
+
+    //description
+    const descDOM = this.DOMelement.querySelector(`#p${this.projectNum}-desc`);
+    this.description = descDOM.value;
+
+    //dueDate
+    const dateDOM = this.DOMelement.querySelector(`#p${this.projectNum}-date`);
+    this.dueDate = dateDOM.value;
+
+    storeProject(this);
   }
 
   updatePriorities(){
@@ -69,5 +103,11 @@ export class Project {
         todoItem.priority = index + 1;
       }
     });
+  }
+
+  toggleComplete(){
+    this.isComplete = !this.isComplete;
+    updateCompletionInDOM(this.DOMelement, this.isComplete);
+    storeProject(this);
   }
 }

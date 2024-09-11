@@ -1,10 +1,14 @@
 import { Project } from "./project.js";
-import { addTextAreaHeightAdjusters, addDragAndReorder, addNewProjectInDOM, removeObjectInDOM, setDraggable, draggedItem } from "./domController.js"
-import { getInitialDueDate } from "./dates.js";
+import { addTextAreaHeightAdjusters, addDragAndReorder, addEventListenersToProject, addProjectInDOM, removeObjectInDOM, updateCompletionInDOM, draggedItem } from "./domController.js"
+import { getInitialDateAsString } from "./dates.js";
+import { storeProject, retrieveProjects, removeProjectFromStorage } from "./storage.js";
 import "./styles/styles.css";
 import "./styles/classes.css";
 import "./styles/buttons.css";
 import "./styles/inputs.css";
+
+// index.js is the entry-point for javascript functionality in this project
+// primarily it handles the initial javascript calling as well as the overall projects array
 
 let currProjectNum = 0;
 let projects = [];
@@ -16,29 +20,22 @@ function newProject() {
   //Because of dynamic variable / closure reasons
   const projectNum = currProjectNum;
 
-  var DOMelement = addNewProjectInDOM(projectNum);
-  const dueDate = getInitialDueDate(); // A Date object, set to one week from today
-  const newProject = new Project(`Project #${projectNum}`, '[description here]', dueDate, 1, projectNum, DOMelement);
+  //Create new Project object, add it into DOM, add eventListeners
+  const dueDate = getInitialDateAsString(); // A Date object, set to one week from today
+  const newProject = new Project(`Project #${projectNum}`, '[description here]', dueDate, 1, projectNum, null, false);
+  const DOMelement = addProjectInDOM(newProject);
+  newProject.DOMelement = DOMelement;
+  addEventListenersToProject(newProject, removeProject);
+  storeProject(newProject);
+
   projects.push(newProject);
-
-  // Add eventListener for new todo
-  const newTodoItem = DOMelement.querySelector('.new-todo');
-  newTodoItem.addEventListener('click', newProject.addNewTodo.bind(newProject));
-
-  // Add eventListeners on other buttons
-  const toggleCompleteBTN = DOMelement.querySelector('.finish-proj');
-  toggleCompleteBTN.addEventListener('click', newProject.toggleComplete.bind(newProject));
-  const deleteProjectBTN = DOMelement.querySelector('.delete');
-  deleteProjectBTN.addEventListener('click', () => removeProject(projectNum));
-  const dragProjectBTN = DOMelement.querySelector('.drag');
-  // Only want the drag button to enable dragging
-  dragProjectBTN.addEventListener('mousedown', () => setDraggable(DOMelement, true));
-  DOMelement.addEventListener('dragend', () => setDraggable(DOMelement, false));
 }
 
 function removeProject(projectNum) {
   if (confirm(`Are you sure to wish to delete ${projects[projectNum - 1].title}?`)){
     removeObjectInDOM(projects[projectNum - 1].DOMelement);
+
+    removeProjectFromStorage(projects[projectNum - 1]);
 
     //Set project to null instead of removing
     //This maintains number consistency across all aspects
@@ -87,8 +84,19 @@ function onPageLoad() {
   const newProjectBtn = document.querySelector('#new-project');
   newProjectBtn.addEventListener('click', newProject);
 
-  //Add a default project
-  newProject();
+  // Load up stored projects or add a default one
+  projects = retrieveProjects();
+  if (projects.length == 0){
+    newProject();
+  }
+  else {
+    projects.forEach((project) => {
+      project.DOMelement = addProjectInDOM(project);
+      addEventListenersToProject(project, removeProject);
+      project.addTodosToDOM();
+      updateCompletionInDOM(project.DOMelement, project.isComplete);
+    });
+  }
 }
 
 onPageLoad();

@@ -1,3 +1,6 @@
+// dates.js handles all functions related to dates and date objects
+// Currently only projects contain a due date
+
 // format the date into YYYY-MM-DD
 export function getInitialDateAsString() {
   const oneWeekFromNow = getInitialDueDate();
