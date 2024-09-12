@@ -1,11 +1,8 @@
 import { Project } from "./project.js";
 import { addTextAreaHeightAdjusters, addDragAndReorder, addEventListenersToProject, addProjectInDOM, removeObjectInDOM, updateCompletionInDOM, draggedItem } from "./domController.js"
 import { getInitialDateAsString } from "./dates.js";
-import { storeProject, retrieveProjects, removeProjectFromStorage } from "./storage.js";
+import { storeProject, storeAllProjects, retrieveProjects, removeProjectFromStorage } from "./storage.js";
 import "./styles/styles.css";
-import "./styles/classes.css";
-import "./styles/buttons.css";
-import "./styles/inputs.css";
 
 // index.js is the entry-point for javascript functionality in this project
 // primarily it handles the initial javascript calling as well as the overall projects array
@@ -22,7 +19,7 @@ function newProject() {
 
   //Create new Project object, add it into DOM, add eventListeners
   const dueDate = getInitialDateAsString(); // A Date object, set to one week from today
-  const newProject = new Project(`Project #${projectNum}`, '[description here]', dueDate, 1, projectNum, null, false);
+  const newProject = new Project(`Project #${projectNum}`, '[description here]', dueDate, projectNum, projectNum, null, false);
   const DOMelement = addProjectInDOM(newProject);
   newProject.DOMelement = DOMelement;
   addEventListenersToProject(newProject, removeProject);
@@ -31,19 +28,27 @@ function newProject() {
   projects.push(newProject);
 }
 
+// Helper function
+function getProjectByProjectNum(projectNum) {
+  const foundProject = projects.find((project) => {
+    return project != null && project.projectNum == projectNum;
+  });
+
+  return foundProject || null;
+}
+
 function removeProject(projectNum) {
-  if (confirm(`Are you sure to wish to delete ${projects[projectNum - 1].title}?`)){
-    removeObjectInDOM(projects[projectNum - 1].DOMelement);
-
-    removeProjectFromStorage(projects[projectNum - 1]);
-
-    //Set project to null instead of removing
-    //This maintains number consistency across all aspects
-    projects[projectNum - 1] = null;
+  const project = getProjectByProjectNum(projectNum);
+  if (confirm(`Are you sure to wish to delete ${project.title}?`)){
+    removeObjectInDOM(project.DOMelement);
+    removeProjectFromStorage(project);
+    const projectIndex = projects.indexOf(project);
+    projects.splice(projectIndex, 1);
   }
 }
 
 function updatePriorities () {
+  console.log('update priorities called');
   if (draggedItem.classList.contains('project')) {
     updateProjectPriorities();
   }
@@ -53,39 +58,35 @@ function updatePriorities () {
 }
 
 function updateProjectPriorities() {
+  console.log('update project prio called');
   const projectElements = document.querySelectorAll('#content .project');
-  
   projectElements.forEach((projectElement, index) => {
-    const projectNum = projectElement.id.replace('p', '') - 1; // #p1 is actually the 0th item in projects array
-    const project = projects[projectNum];
+    const projectNum = projectElement.id.replace('p', '');
+    const project = getProjectByProjectNum(projectNum);
 
     if (project) {
-      // update the priority property
       project.priority = index + 1;
     }
   });
+
+  storeAllProjects(projects);
 }
 
 function updateTodoItemsPriorities() {
-  const projectNum = draggedItem.id.split('-')[0].slice(1) - 1; // e.g. p6-t12 will return '5' for use in array
-  const project = projects[projectNum];
+  console.log('update todo prio called');
+  const projectNum = draggedItem.id.split('-')[0].slice(1); // e.g. p6-t12 will return '6'
+  const project = getProjectByProjectNum(projectNum);
   project.updatePriorities();
+  storeProject(project);
 }
 
 // Run 1x on page load, mostly adding event handlers
 function onPageLoad() {
   addTextAreaHeightAdjusters();
 
-  // eventListeners on #content
-  addDragAndReorder();
-  const contentDiv = document.querySelector('#content');
-  contentDiv.addEventListener('drop', updatePriorities);
-
-  const newProjectBtn = document.querySelector('#new-project');
-  newProjectBtn.addEventListener('click', newProject);
-
   // Load up stored projects or add a default one
   projects = retrieveProjects();
+  currProjectNum = projects.length;
   if (projects.length == 0){
     newProject();
   }
@@ -97,6 +98,18 @@ function onPageLoad() {
       updateCompletionInDOM(project.DOMelement, project.isComplete);
     });
   }
+
+  // eventListeners on #content
+  addDragAndReorder();
+  const contentDiv = document.querySelector('#content');
+  contentDiv.addEventListener('drop', (e) => {
+    e.preventDefault();
+    console.log("Drop event triggered", e);
+    updatePriorities();
+  });
+
+  const newProjectBtn = document.querySelector('#new-project');
+  newProjectBtn.addEventListener('click', newProject);
 }
 
 onPageLoad();

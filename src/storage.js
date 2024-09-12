@@ -4,14 +4,17 @@ import { TodoItem } from "./todo-item.js";
 
 export function storeProject(project){
   const projectNum = project.projectNum;
+  let projectCount = localStorage.getItem("projectCount");
+  if (!projectCount) {
+    projectCount = 0;
+  }
 
   //If a new project then increase projectCount
   if (!localStorage.getItem(`p-${projectNum}`)) {
-    localStorage.setItem("projectCount", localStorage.getItem("projectCount") + 1);
+    localStorage.setItem("projectCount", parseInt(projectCount) + 1);
   }
 
   if (project != null){
-    console.log(JSON.stringify(project.stringify()));
     localStorage.setItem(`p-${projectNum}`, JSON.stringify(project.stringify()));
   }
   else {
@@ -38,7 +41,7 @@ export function retrieveProjects() {
 
     // Create the project object
     let project = null;
-    if (projectJSON != 'null'){
+    if (projectJSON != null){
       project = new Project(projectJSON.title, projectJSON.description, projectJSON.dueDate, projectJSON.priority, projectJSON.projectNum, null, projectJSON.isComplete);
       
       // Create all the Todo objects
@@ -47,17 +50,40 @@ export function retrieveProjects() {
         
         const todoJSON = todoItemsJSON[j];
         let todoItem = null;
-        if (todoJSON != null) {
+        if (todoJSON != null && todoJSON != 'null') {
           todoItem = new TodoItem(todoJSON.title, todoJSON.description, todoJSON.priority, todoJSON.todoNum, project, todoJSON.isComplete);
         }
-        project.todoItems.push(todoItem);
-      }
-    }
 
-    projects.push(project);
+        // insert todo object based on priority
+        insertBasedOnPriority(todoItem, project.todoItems);
+      }
+
+      // insert project based on priority
+      insertBasedOnPriority(project, projects);
+    }
   }
 
   return projects;
+}
+
+function insertBasedOnPriority(item, collection){
+  let inserted = false;
+  if (item != null) {
+    for (let j = 0; j < collection.length; j++) {
+      if (collection[j] && item.priority < collection[j].priority) {
+        collection.splice(j, 0, item);  // insert at the correct index
+        inserted = true;
+        break;
+      }
+    }
+  }
+  
+  // put at end if otherwise not inserted
+  if (!inserted) {
+    collection.push(item);
+  }
+
+  return collection;
 }
 
 // projects aren't really removed but set to null

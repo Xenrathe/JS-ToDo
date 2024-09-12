@@ -35,7 +35,6 @@ export function addTodoInDOM(todoObject) {
   const projectElement = todoObject.parentProject.DOMelement;
 
   let newTodoDiv = document.createElement("div");
-  console.log(todoObject.isComplete);
   newTodoDiv.classList.add('todo-item', 'incomplete');
   newTodoDiv.id = `p${projectNum}-t${todoNum}`;
   newTodoDiv.innerHTML = `
@@ -109,7 +108,10 @@ export function addEventListenersToProject(project, removeProjectFunction) {
   const dragProjectBTN = DOMelement.querySelector('.drag');
   // Only want the drag button to enable dragging
   dragProjectBTN.addEventListener('mousedown', () => setDraggable(DOMelement, true));
-  DOMelement.addEventListener('dragend', () => setDraggable(DOMelement, false));
+  // There's a 50ms timeout here because otherwise it can sometimes interfere with a 'drop' event
+  DOMelement.addEventListener('dragend', () => {
+    setTimeout(() => setDraggable(DOMelement, false), 50);
+  });
 
   // Add eventListeners on text areas and date
   const titleText = DOMelement.querySelector(`#p${project.projectNum}-title`);
@@ -132,7 +134,10 @@ export function addEventListenersToTodo(todoItem) {
   const dragTodoBTN = DOMelement.querySelector('.drag');
   // Only want the drag button to enable dragging
   dragTodoBTN.addEventListener('mousedown', () => setDraggable(DOMelement, true));
-  DOMelement.addEventListener('dragend', () => setDraggable(DOMelement, false));
+  // There's a 50ms timeout here because otherwise it can sometimes interfere with a 'drop' event
+  DOMelement.addEventListener('dragend', () => {
+    setTimeout(() => setDraggable(DOMelement, false), 50);
+  });
 
   // Add eventListeners on text areas and date
   const titleText = DOMelement.querySelector(".title");

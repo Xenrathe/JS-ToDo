@@ -1,3 +1,7 @@
+@import "./buttons.css";
+@import "./classes.css";
+@import "./inputs.css";
+
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;

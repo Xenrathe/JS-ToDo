@@ -34,10 +34,21 @@ export class Project {
   // Should only be called upon pageload
   addTodosToDOM(){
     this.todoItems.forEach((todoItem) => {
-      todoItem.DOMelement = addTodoInDOM(todoItem);
-      addEventListenersToTodo(todoItem);
-      updateCompletionInDOM(todoItem.DOMelement, todoItem.isComplete);
+      if (todoItem != null){
+        todoItem.DOMelement = addTodoInDOM(todoItem);
+        addEventListenersToTodo(todoItem);
+        updateCompletionInDOM(todoItem.DOMelement, todoItem.isComplete);
+      }
     });
+  }
+
+  // Helper function
+  getTodoByTodoNum(todoNum) {
+    const foundTodo = this.todoItems.find((todoItem) => {
+      return todoItem != null && todoItem.todoNum == todoNum;
+    });
+
+    return foundTodo || null;
   }
 
   // Remove todo based on indexNum (which the calling function should supply)
@@ -67,8 +78,6 @@ export class Project {
       }
     });
 
-    console.log("toDoItemStrings:" + JSON.stringify(todoItemStrings));
-
     const stringObject = {title: this.title, description: this.description, dueDate: this.dueDate, priority: this.priority, 
       projectNum: this.projectNum, isComplete: this.isComplete, todoItems: JSON.stringify(todoItemStrings)};
 
@@ -93,10 +102,9 @@ export class Project {
 
   updatePriorities(){
     const todoElements = this.DOMelement.querySelectorAll('.todo-item');
-  
     todoElements.forEach((todoElement, index) => {
-      const todoNum = todoElement.id.split('-')[1].slice(1) - 1; // p6-t12 becomes '11'
-      const todoItem = this.todoItems[todoNum];
+      const todoNum = todoElement.id.split('-')[1].slice(1); // p6-t12 becomes '12'
+      const todoItem = this.getTodoByTodoNum(todoNum);
 
       // Because some may be null
       if (todoItem) {
