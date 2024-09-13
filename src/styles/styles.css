@@ -40,7 +40,15 @@ nav {
   text-align: center;
   line-height: 1;
   color: #ffc6c6;
-  animation: neon .08s ease-in-out infinite alternate;
+  text-shadow:
+    0 0 6px rgba(228, 202, 202, 0.92),
+    0 0 30px rgba(202,228,225,0.34),
+    0 0 12px rgba(242, 30, 30, 0.52),
+    0 0 21px rgba(242, 30, 30, 0.92),
+    0 0 34px rgba(242, 30, 30, 0.78),
+    0 0 54px rgba(242, 30, 30, 0.92);
+  /* animation was causing hang issues after page was open for some amount of time */
+  /*animation: neon .08s ease-in-out infinite alternate;*/
 }
 
 @keyframes neon {
