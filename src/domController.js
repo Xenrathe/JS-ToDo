@@ -108,10 +108,7 @@ export function addEventListenersToProject(project, removeProjectFunction) {
   const dragProjectBTN = DOMelement.querySelector('.drag');
   // Only want the drag button to enable dragging
   dragProjectBTN.addEventListener('mousedown', () => setDraggable(DOMelement, true));
-  // There's a 50ms timeout here because otherwise it can sometimes interfere with a 'drop' event
-  DOMelement.addEventListener('dragend', () => {
-    setTimeout(() => setDraggable(DOMelement, false), 50);
-  });
+  DOMelement.addEventListener('dragend', () => setDraggable(DOMelement, false));
 
   // Add eventListeners on text areas and date
   const titleText = DOMelement.querySelector(`#p${project.projectNum}-title`);
@@ -134,10 +131,7 @@ export function addEventListenersToTodo(todoItem) {
   const dragTodoBTN = DOMelement.querySelector('.drag');
   // Only want the drag button to enable dragging
   dragTodoBTN.addEventListener('mousedown', () => setDraggable(DOMelement, true));
-  // There's a 50ms timeout here because otherwise it can sometimes interfere with a 'drop' event
-  DOMelement.addEventListener('dragend', () => {
-    setTimeout(() => setDraggable(DOMelement, false), 50);
-  });
+  DOMelement.addEventListener('dragend', () => setDraggable(DOMelement, false));
 
   // Add eventListeners on text areas and date
   const titleText = DOMelement.querySelector(".title");
@@ -196,6 +190,12 @@ function setDraggable(element, state) {
 // add drag and reorder event listener on #content div
 export function addDragAndReorder() {
   const contentDiv = document.querySelector('#content');
+
+  //These two preventDefaults() are required to have proper functioning of the 'drop' event, located elsewhere
+  contentDiv.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+  });
+
   contentDiv.addEventListener('dragover', (e) => {
     e.preventDefault();
     
