@@ -172,6 +172,10 @@ export function removeObjectInDOM(element) {
   element.remove();
 }
 
+export function clearObjectInDOM(element) {
+  element.innerHTML = "";
+}
+
 // This will be called by clicking (or releasing) a drag button
 export let draggedItem = null;
 function setDraggable(element, state) {

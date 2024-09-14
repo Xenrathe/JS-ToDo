@@ -1,7 +1,7 @@
 import { Project } from "./project.js";
-import { addTextAreaHeightAdjusters, addDragAndReorder, addEventListenersToProject, addProjectInDOM, removeObjectInDOM, updateCompletionInDOM, draggedItem } from "./domController.js"
+import { addTextAreaHeightAdjusters, addDragAndReorder, addEventListenersToProject, addProjectInDOM, clearObjectInDOM, removeObjectInDOM, updateCompletionInDOM, draggedItem } from "./domController.js"
 import { getInitialDateAsString } from "./dates.js";
-import { storeProject, storeAllProjects, retrieveProjects, removeProjectFromStorage } from "./storage.js";
+import { clearAllProjects, storeProject, storeAllProjects, retrieveProjects, removeProjectFromStorage } from "./storage.js";
 import "./styles/styles.css";
 
 // index.js is the entry-point for javascript functionality in this project
@@ -80,10 +80,7 @@ function updateTodoItemsPriorities() {
   storeProject(project);
 }
 
-// Run 1x on page load, mostly adding event handlers
-function onPageLoad() {
-  addTextAreaHeightAdjusters();
-
+function loadProjects(){
   // Load up stored projects or add a default one
   projects = retrieveProjects();
   currProjectNum = projects.length;
@@ -98,6 +95,22 @@ function onPageLoad() {
       updateCompletionInDOM(project.DOMelement, project.isComplete);
     });
   }
+}
+
+function clearProjects(){
+  if (confirm(`Are you sure you wish to clear all projects? This cannot be undone.`)){
+    clearAllProjects();
+    const contentDiv = document.querySelector('#content');
+    clearObjectInDOM(contentDiv);
+    loadProjects();
+  }
+}
+
+// Run 1x on page load, mostly adding event handlers
+function onPageLoad() {
+  addTextAreaHeightAdjusters();
+
+  loadProjects();
 
   // eventListeners on #content
   addDragAndReorder();
@@ -110,6 +123,9 @@ function onPageLoad() {
 
   const newProjectBtn = document.querySelector('#new-project');
   newProjectBtn.addEventListener('click', newProject);
+
+  const clearProjectsBtn = document.querySelector('#clear-projects');
+  clearProjectsBtn.addEventListener('click', clearProjects);
 }
 
 onPageLoad();

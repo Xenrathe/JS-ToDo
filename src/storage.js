@@ -2,6 +2,10 @@ import { Project } from "./project.js";
 import { TodoItem } from "./todo-item.js";
 // storage.js handles all functionality related to using the localStorage stuff within the Web Storage API
 
+export function clearAllProjects() {
+  localStorage.clear();
+}
+
 export function storeProject(project){
   const projectNum = project.projectNum;
   let projectCount = localStorage.getItem("projectCount");
