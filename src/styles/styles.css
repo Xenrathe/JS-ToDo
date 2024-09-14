@@ -24,9 +24,9 @@ nav {
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  height: 100px;
-  margin-right: max(15%, 50px);
-  margin-left: 50px;
+  height: 80px;
+  margin-right: max(10%, 25px);
+  margin-left: 25px;
 }
 
 .neon {
@@ -36,7 +36,7 @@ nav {
   justify-content: center;
   align-items: center;
 
-  font-size: 3rem;
+  font-size: clamp(26px, calc(1em + 2vw), 3em);
   text-align: center;
   line-height: 1;
   color: #ffc6c6;
