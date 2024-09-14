@@ -7,48 +7,17 @@
 <script defer src="main.js"></script></head>
 <body>
   <header>
-      <nav>
-          <h1>Project/Todo App</h1>
-          <button>New Project</button>
-      </nav>
+    <nav>
+      <div class="neon">Productivity Master 9000</div>
+      <div class="buttons">
+        <button id="new-project" class="neon-border">New Project</button>
+        <button id="clear-projects" class="neon-border">Clear All</button>
+      </div>
+    </nav>
   </header>
 
+  <!-- Projects will be added here via JS -->
   <div id="content">
-      <!-- Example Project 1 -->
-      <div class="project">
-          <h2>Project Alpha</h2>
-          <p>Description: A sample project to manage development tasks.</p>
-          <div class="todo-item">
-              <h3>Todo: Setup Development Environment</h3>
-              <p>Description: Install necessary software and dependencies.</p>
-              <p>Due Date: 2024-09-01</p>
-              <p>Priority: High</p>
-          </div>
-          <div class="todo-item">
-              <h3>Todo: Create Initial Project Structure</h3>
-              <p>Description: Setup the basic file structure for the project.</p>
-              <p>Due Date: 2024-09-02</p>
-              <p>Priority: Medium</p>
-          </div>
-      </div>
-
-      <!-- Example Project 2 -->
-      <div class="project">
-          <h2>Project Beta</h2>
-          <p>Description: A project for client-side features.</p>
-          <div class="todo-item">
-              <h3>Todo: Design UI Mockups</h3>
-              <p>Description: Create visual designs for the user interface.</p>
-              <p>Due Date: 2024-09-05</p>
-              <p>Priority: High</p>
-          </div>
-          <div class="todo-item">
-              <h3>Todo: Implement Navigation</h3>
-              <p>Description: Set up the initial navigation for the application.</p>
-              <p>Due Date: 2024-09-07</p>
-              <p>Priority: Low</p>
-          </div>
-      </div>
   </div>
 </body>
 </html>
