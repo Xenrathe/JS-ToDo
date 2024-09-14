@@ -47,8 +47,12 @@ nav {
     0 0 21px rgba(242, 30, 30, 0.92),
     0 0 34px rgba(242, 30, 30, 0.78),
     0 0 54px rgba(242, 30, 30, 0.92);
-  /* animation was causing hang issues after page was open for some amount of time */
+  /* having animation on all the time was causing freeze / hang issues */
   /*animation: neon .08s ease-in-out infinite alternate;*/
+}
+
+.neon:hover {
+  animation: neon .08s ease-in-out infinite alternate;
 }
 
 @keyframes neon {
