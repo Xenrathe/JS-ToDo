@@ -1,10 +1,23 @@
 import { TodoItem } from "./todo-item.js";
-import { addTodoInDOM, updateCompletionInDOM, removeObjectInDOM, addEventListenersToTodo } from "./domController.js";
+import {
+  addTodoInDOM,
+  updateCompletionInDOM,
+  removeObjectInDOM,
+  addEventListenersToTodo,
+} from "./domController.js";
 import { storeProject } from "./storage.js";
 // project.js handles the Project class
 
 export class Project {
-  constructor(title, description, dueDate, priority, projectNum, DOMelement, isComplete) {
+  constructor(
+    title,
+    description,
+    dueDate,
+    priority,
+    projectNum,
+    DOMelement,
+    isComplete
+  ) {
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;
@@ -16,25 +29,31 @@ export class Project {
   }
 
   // Adds an empty / default todoItem to the project
-  addNewTodo(){
-    if (this.isComplete)
-      return;
+  addNewTodo() {
+    if (this.isComplete) return;
 
     const todoItemNum = this.todoItems.length + 1;
 
     //Create todo object
-    const newTodoItem = new TodoItem(`Todo #${todoItemNum}`, "[description here]", todoItemNum, todoItemNum, this, false);
+    const newTodoItem = new TodoItem(
+      `Todo #${todoItemNum}`,
+      "[description here]",
+      todoItemNum,
+      todoItemNum,
+      this,
+      false
+    );
     newTodoItem.DOMelement = addTodoInDOM(newTodoItem);
     addEventListenersToTodo(newTodoItem);
-    
+
     this.todoItems.push(newTodoItem);
     storeProject(this);
   }
 
   // Should only be called upon pageload
-  addTodosToDOM(){
+  addTodosToDOM() {
     this.todoItems.forEach((todoItem) => {
-      if (todoItem != null){
+      if (todoItem != null) {
         todoItem.DOMelement = addTodoInDOM(todoItem);
         addEventListenersToTodo(todoItem);
         updateCompletionInDOM(todoItem.DOMelement, todoItem.isComplete);
@@ -53,12 +72,11 @@ export class Project {
 
   // Remove todo based on indexNum (which the calling function should supply)
   removeTodo(todoItem) {
-    if (this.isComplete)
-      return;
+    if (this.isComplete) return;
 
-    if (confirm(`Are you sure to wish to delete ${todoItem.title}?`)){
+    if (confirm(`Are you sure to wish to delete ${todoItem.title}?`)) {
       removeObjectInDOM(todoItem.DOMelement);
-  
+
       //Set todo to null instead of removing
       //This maintains number consistency across all aspects
       const index = this.todoItems.indexOf(todoItem);
@@ -69,24 +87,32 @@ export class Project {
 
   stringify() {
     const todoItemStrings = [];
-    this.todoItems.forEach ((todoItem) => {
+    this.todoItems.forEach((todoItem) => {
       if (todoItem != null) {
         todoItemStrings.push(todoItem.stringify());
-      }
-      else {
-        todoItemStrings.push('null');
+      } else {
+        todoItemStrings.push("null");
       }
     });
 
-    const stringObject = {title: this.title, description: this.description, dueDate: this.dueDate, priority: this.priority, 
-      projectNum: this.projectNum, isComplete: this.isComplete, todoItems: JSON.stringify(todoItemStrings)};
+    const stringObject = {
+      title: this.title,
+      description: this.description,
+      dueDate: this.dueDate,
+      priority: this.priority,
+      projectNum: this.projectNum,
+      isComplete: this.isComplete,
+      todoItems: JSON.stringify(todoItemStrings),
+    };
 
     return stringObject;
   }
 
   updateValues() {
     //title
-    const titleDOM = this.DOMelement.querySelector(`#p${this.projectNum}-title`);
+    const titleDOM = this.DOMelement.querySelector(
+      `#p${this.projectNum}-title`
+    );
     this.title = titleDOM.value;
 
     //description
@@ -100,10 +126,10 @@ export class Project {
     storeProject(this);
   }
 
-  updatePriorities(){
-    const todoElements = this.DOMelement.querySelectorAll('.todo-item');
+  updatePriorities() {
+    const todoElements = this.DOMelement.querySelectorAll(".todo-item");
     todoElements.forEach((todoElement, index) => {
-      const todoNum = todoElement.id.split('-')[1].slice(1); // p6-t12 becomes '12'
+      const todoNum = todoElement.id.split("-")[1].slice(1); // p6-t12 becomes '12'
       const todoItem = this.getTodoByTodoNum(todoNum);
 
       // Because some may be null
@@ -113,7 +139,7 @@ export class Project {
     });
   }
 
-  toggleComplete(){
+  toggleComplete() {
     this.isComplete = !this.isComplete;
     updateCompletionInDOM(this.DOMelement, this.isComplete);
     storeProject(this);

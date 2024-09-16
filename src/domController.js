@@ -1,7 +1,3 @@
-import { getInitialDateAsString } from "./dates.js";
-import { Project } from "./project.js";
-import { storeProject } from "./storage.js";
-
 // domController.js handles all functionality related to adjusting the actual DOM
 // this includes setting eventListeners on various DOM objects
 

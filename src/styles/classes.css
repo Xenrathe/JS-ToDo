@@ -12,7 +12,8 @@
   cursor: text;
 }
 
-.highlighted-input:not([disabled]):hover, .highlighted-input:not([disabled]):focus {
+.highlighted-input:not([disabled]):hover,
+.highlighted-input:not([disabled]):focus {
   background: rgb(240, 240, 240) !important;
 }
 

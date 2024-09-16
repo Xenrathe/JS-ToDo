@@ -1,7 +1,22 @@
 import { Project } from "./project.js";
-import { addTextAreaHeightAdjusters, addDragAndReorder, addEventListenersToProject, addProjectInDOM, clearObjectInDOM, removeObjectInDOM, updateCompletionInDOM, draggedItem } from "./domController.js"
+import {
+  addTextAreaHeightAdjusters,
+  addDragAndReorder,
+  addEventListenersToProject,
+  addProjectInDOM,
+  clearObjectInDOM,
+  removeObjectInDOM,
+  updateCompletionInDOM,
+  draggedItem,
+} from "./domController.js";
 import { getInitialDateAsString } from "./dates.js";
-import { clearAllProjects, storeProject, storeAllProjects, retrieveProjects, removeProjectFromStorage } from "./storage.js";
+import {
+  clearAllProjects,
+  storeProject,
+  storeAllProjects,
+  retrieveProjects,
+  removeProjectFromStorage,
+} from "./storage.js";
 import "./styles/styles.css";
 
 // index.js is the entry-point for javascript functionality in this project
@@ -19,7 +34,15 @@ function newProject() {
 
   //Create new Project object, add it into DOM, add eventListeners
   const dueDate = getInitialDateAsString(); // A Date object, set to one week from today
-  const newProject = new Project(`Project #${projectNum}`, '[description here]', dueDate, projectNum, projectNum, null, false);
+  const newProject = new Project(
+    `Project #${projectNum}`,
+    "[description here]",
+    dueDate,
+    projectNum,
+    projectNum,
+    null,
+    false
+  );
   const DOMelement = addProjectInDOM(newProject);
   newProject.DOMelement = DOMelement;
   addEventListenersToProject(newProject, removeProject);
@@ -39,7 +62,7 @@ function getProjectByProjectNum(projectNum) {
 
 function removeProject(projectNum) {
   const project = getProjectByProjectNum(projectNum);
-  if (confirm(`Are you sure to wish to delete ${project.title}?`)){
+  if (confirm(`Are you sure to wish to delete ${project.title}?`)) {
     removeObjectInDOM(project.DOMelement);
     removeProjectFromStorage(project);
     const projectIndex = projects.indexOf(project);
@@ -47,21 +70,20 @@ function removeProject(projectNum) {
   }
 }
 
-function updatePriorities () {
-  console.log('update priorities called');
-  if (draggedItem.classList.contains('project')) {
+function updatePriorities() {
+  console.log("update priorities called");
+  if (draggedItem.classList.contains("project")) {
     updateProjectPriorities();
-  }
-  else {
+  } else {
     updateTodoItemsPriorities();
   }
 }
 
 function updateProjectPriorities() {
-  console.log('update project prio called');
-  const projectElements = document.querySelectorAll('#content .project');
+  console.log("update project prio called");
+  const projectElements = document.querySelectorAll("#content .project");
   projectElements.forEach((projectElement, index) => {
-    const projectNum = projectElement.id.replace('p', '');
+    const projectNum = projectElement.id.replace("p", "");
     const project = getProjectByProjectNum(projectNum);
 
     if (project) {
@@ -73,21 +95,20 @@ function updateProjectPriorities() {
 }
 
 function updateTodoItemsPriorities() {
-  console.log('update todo prio called');
-  const projectNum = draggedItem.id.split('-')[0].slice(1); // e.g. p6-t12 will return '6'
+  console.log("update todo prio called");
+  const projectNum = draggedItem.id.split("-")[0].slice(1); // e.g. p6-t12 will return '6'
   const project = getProjectByProjectNum(projectNum);
   project.updatePriorities();
   storeProject(project);
 }
 
-function loadProjects(){
+function loadProjects() {
   // Load up stored projects or add a default one
   projects = retrieveProjects();
   currProjectNum = projects.length;
-  if (projects.length == 0){
+  if (projects.length == 0) {
     newProject();
-  }
-  else {
+  } else {
     projects.forEach((project) => {
       project.DOMelement = addProjectInDOM(project);
       addEventListenersToProject(project, removeProject);
@@ -97,10 +118,14 @@ function loadProjects(){
   }
 }
 
-function clearProjects(){
-  if (confirm(`Are you sure you wish to clear all projects? This cannot be undone.`)){
+function clearProjects() {
+  if (
+    confirm(
+      `Are you sure you wish to clear all projects? This cannot be undone.`
+    )
+  ) {
     clearAllProjects();
-    const contentDiv = document.querySelector('#content');
+    const contentDiv = document.querySelector("#content");
     clearObjectInDOM(contentDiv);
     loadProjects();
   }
@@ -114,18 +139,18 @@ function onPageLoad() {
 
   // eventListeners on #content
   addDragAndReorder();
-  const contentDiv = document.querySelector('#content');
-  contentDiv.addEventListener('drop', (e) => {
+  const contentDiv = document.querySelector("#content");
+  contentDiv.addEventListener("drop", (e) => {
     e.preventDefault();
     console.log("Drop event triggered", e);
     updatePriorities();
   });
 
-  const newProjectBtn = document.querySelector('#new-project');
-  newProjectBtn.addEventListener('click', newProject);
+  const newProjectBtn = document.querySelector("#new-project");
+  newProjectBtn.addEventListener("click", newProject);
 
-  const clearProjectsBtn = document.querySelector('#clear-projects');
-  clearProjectsBtn.addEventListener('click', clearProjects);
+  const clearProjectsBtn = document.querySelector("#clear-projects");
+  clearProjectsBtn.addEventListener("click", clearProjects);
 }
 
 onPageLoad();

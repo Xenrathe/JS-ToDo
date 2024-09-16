@@ -3,7 +3,7 @@
 @import "./inputs.css";
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f0f0f0;
@@ -40,39 +40,30 @@ nav {
   text-align: center;
   line-height: 1;
   color: #ffc6c6;
-  text-shadow:
-    0 0 6px rgba(228, 202, 202, 0.92),
-    0 0 30px rgba(202,228,225,0.34),
-    0 0 12px rgba(242, 30, 30, 0.52),
-    0 0 21px rgba(242, 30, 30, 0.92),
-    0 0 34px rgba(242, 30, 30, 0.78),
+  text-shadow: 0 0 6px rgba(228, 202, 202, 0.92),
+    0 0 30px rgba(202, 228, 225, 0.34), 0 0 12px rgba(242, 30, 30, 0.52),
+    0 0 21px rgba(242, 30, 30, 0.92), 0 0 34px rgba(242, 30, 30, 0.78),
     0 0 54px rgba(242, 30, 30, 0.92);
   /* having animation on all the time was causing freeze / hang issues */
   /*animation: neon .08s ease-in-out infinite alternate;*/
 }
 
 .neon:hover {
-  animation: neon .08s ease-in-out infinite alternate;
+  animation: neon 0.08s ease-in-out infinite alternate;
 }
 
 @keyframes neon {
   from {
-    text-shadow:
-    0 0 6px rgba(228, 202, 202, 0.92),
-    0 0 30px rgba(202,228,225,0.34),
-    0 0 12px rgba(242, 30, 30, 0.52),
-    0 0 21px rgba(242, 30, 30, 0.92),
-    0 0 34px rgba(242, 30, 30, 0.78),
-    0 0 54px rgba(242, 30, 30, 0.92);
+    text-shadow: 0 0 6px rgba(228, 202, 202, 0.92),
+      0 0 30px rgba(202, 228, 225, 0.34), 0 0 12px rgba(242, 30, 30, 0.52),
+      0 0 21px rgba(242, 30, 30, 0.92), 0 0 34px rgba(242, 30, 30, 0.78),
+      0 0 54px rgba(242, 30, 30, 0.92);
   }
   to {
-    text-shadow:
-    0 0 6px rgba(228, 202, 202, 0.98),
-    0 0 30px rgba(228, 202, 202, 0.42),
-    0 0 12px rgba(242, 30, 30, 0.58),
-    0 0 22px rgba(242, 30, 30, 0.84),
-    0 0 38px rgba(242, 30, 30, 0.88),
-    0 0 60px rgb(242, 30, 30);
+    text-shadow: 0 0 6px rgba(228, 202, 202, 0.98),
+      0 0 30px rgba(228, 202, 202, 0.42), 0 0 12px rgba(242, 30, 30, 0.58),
+      0 0 22px rgba(242, 30, 30, 0.84), 0 0 38px rgba(242, 30, 30, 0.88),
+      0 0 60px rgb(242, 30, 30);
   }
 }
 
@@ -138,7 +129,8 @@ nav {
   flex: 1;
 }
 
-.todo-item, .new-todo {
+.todo-item,
+.new-todo {
   background-color: #f9f9f9;
   margin-bottom: 0.5rem;
   padding: 0.75rem;
@@ -146,7 +138,9 @@ nav {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.todo-item.complete, .complete .todo-item, .complete .new-todo {
+.todo-item.complete,
+.complete .todo-item,
+.complete .new-todo {
   background-color: #a6ff90;
 }
 

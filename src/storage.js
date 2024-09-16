@@ -6,7 +6,7 @@ export function clearAllProjects() {
   localStorage.clear();
 }
 
-export function storeProject(project){
+export function storeProject(project) {
   const projectNum = project.projectNum;
   let projectCount = localStorage.getItem("projectCount");
   if (!projectCount) {
@@ -18,16 +18,17 @@ export function storeProject(project){
     localStorage.setItem("projectCount", parseInt(projectCount) + 1);
   }
 
-  if (project != null){
-    localStorage.setItem(`p-${projectNum}`, JSON.stringify(project.stringify()));
-  }
-  else {
+  if (project != null) {
+    localStorage.setItem(
+      `p-${projectNum}`,
+      JSON.stringify(project.stringify())
+    );
+  } else {
     localStorage.setItem(`p-${projectNum}`, "null");
   }
 }
 
-export function storeAllProjects(projects){
-
+export function storeAllProjects(projects) {
   projects.forEach((project) => {
     storeProject(project);
   });
@@ -45,17 +46,31 @@ export function retrieveProjects() {
 
     // Create the project object
     let project = null;
-    if (projectJSON != null){
-      project = new Project(projectJSON.title, projectJSON.description, projectJSON.dueDate, projectJSON.priority, projectJSON.projectNum, null, projectJSON.isComplete);
-      
+    if (projectJSON != null) {
+      project = new Project(
+        projectJSON.title,
+        projectJSON.description,
+        projectJSON.dueDate,
+        projectJSON.priority,
+        projectJSON.projectNum,
+        null,
+        projectJSON.isComplete
+      );
+
       // Create all the Todo objects
       const todoItemsJSON = JSON.parse(projectJSON.todoItems);
       for (let j = 0; j < todoItemsJSON.length; j++) {
-        
         const todoJSON = todoItemsJSON[j];
         let todoItem = null;
-        if (todoJSON != null && todoJSON != 'null') {
-          todoItem = new TodoItem(todoJSON.title, todoJSON.description, todoJSON.priority, todoJSON.todoNum, project, todoJSON.isComplete);
+        if (todoJSON != null && todoJSON != "null") {
+          todoItem = new TodoItem(
+            todoJSON.title,
+            todoJSON.description,
+            todoJSON.priority,
+            todoJSON.todoNum,
+            project,
+            todoJSON.isComplete
+          );
         }
 
         // insert todo object based on priority
@@ -70,18 +85,18 @@ export function retrieveProjects() {
   return projects;
 }
 
-function insertBasedOnPriority(item, collection){
+function insertBasedOnPriority(item, collection) {
   let inserted = false;
   if (item != null) {
     for (let j = 0; j < collection.length; j++) {
       if (collection[j] && item.priority < collection[j].priority) {
-        collection.splice(j, 0, item);  // insert at the correct index
+        collection.splice(j, 0, item); // insert at the correct index
         inserted = true;
         break;
       }
     }
   }
-  
+
   // put at end if otherwise not inserted
   if (!inserted) {
     collection.push(item);
