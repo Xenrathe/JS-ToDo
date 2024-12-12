@@ -23,7 +23,7 @@ Productivity Master 9000 is active on GitHub pages: (https://xenrathe.github.io/
 - Backend: N/A - no backend
 - Other: Web Storage API (localStorage) for persisting data on single device
 
-![Screenshot of drag/drop functionality](https://github.com/Xenrathe/JS-BattleTreats/blob/main/Drag.png?raw=true)
+![Screenshot of drag/drop functionality](https://github.com/Xenrathe/JS-ToDo/blob/main/Drag.png?raw=true)
 
 ### Future to-do list
 
